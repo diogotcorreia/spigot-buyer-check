@@ -1,0 +1,34 @@
+{
+  "name": "spigot-buyer-check",
+  "version": "1.0.0",
+  "description": "A NodeJS package that allows you to check the buyers list on Spigot for a premium plugin",
+  "main": "src/index.js",
+  "repository": "git@github.com:diogotcorreia/spigot-buyer-check.git",
+  "author": "Diogo Correia <me@diogotc.com>",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "@babel/cli": "^7.7.7",
+    "@babel/core": "^7.7.7",
+    "@babel/node": "^7.7.7",
+    "@babel/preset-env": "^7.7.7",
+    "husky": "^3.1.0",
+    "nodemon": "^2.0.2",
+    "prettier": "^1.19.1"
+  },
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "nodemon src/index.js --exec babel-node",
+    "build": "babel src -d dist",
+    "postinstall": "npm run build",
+    "format": "prettier --write src/**/*.{js,jsx}"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run format"
+    }
+  },
+  "dependencies": {
+    "axios": "^0.19.0"
+  }
+}
