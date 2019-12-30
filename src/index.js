@@ -40,10 +40,7 @@ class SpigotSite {
         cookie_check: 1,
       }),
       {
-        responseType: 'document',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          Referer: 'https://www.spigotmc.org/login/login',
           Cookie: encodeCookies(this.cookies),
         },
       }
@@ -65,13 +62,9 @@ class SpigotSite {
         _xfToken: '',
         remember: 1,
         redirect: '/',
-        save: 'Confirm',
       }),
       {
-        responseType: 'document',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          Referer: 'https://www.spigotmc.org/login/two-step',
           Cookie: encodeCookies(this.cookies),
         },
         maxRedirects: 0,
@@ -89,7 +82,6 @@ class SpigotSite {
     // Get first page of buyers
     const buyersResponse = (
       await axios.get(`https://www.spigotmc.org/resources/${resource}/buyers`, {
-        responseType: 'document',
         headers: {
           Cookie: encodeCookies(this.cookies),
         },
@@ -101,17 +93,17 @@ class SpigotSite {
       buyers.push(...[...body.matchAll(BUYER_REGEX)].map((v) => ({ id: v[1], username: v[2] })));
     parseResponse(buyersResponse);
     // Request the buyers from the other pages
-    for (let i = 2; i <= pageLimit; i++) {
-      const buyersResponsePage = (
-        await axios.get(`https://www.spigotmc.org/resources/${resource}/buyers?page=${i}`, {
-          responseType: 'document',
-          headers: {
-            Cookie: encodeCookies(this.cookies),
-          },
-        })
-      ).data;
-      parseResponse(buyersResponsePage);
-    }
+    if (pageLimit)
+      for (let i = 2; i <= pageLimit; i++) {
+        const buyersResponsePage = (
+          await axios.get(`https://www.spigotmc.org/resources/${resource}/buyers?page=${i}`, {
+            headers: {
+              Cookie: encodeCookies(this.cookies),
+            },
+          })
+        ).data;
+        parseResponse(buyersResponsePage);
+      }
     return buyers;
   }
 }
