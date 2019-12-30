@@ -16,7 +16,7 @@ const getBuyers = async () => {
     // getBuyersList(resourceId)
     const buyers = await getBuyersList(30331); // [{id: 123456, username: "user"}, ...]
   } catch (e) {
-    console.err('Failed to fetch buyer list', e);
+    console.error('Failed to fetch buyer list', e);
   }
 };
 ```
