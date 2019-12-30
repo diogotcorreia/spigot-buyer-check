@@ -1,9 +1,9 @@
 {
-  "name": "spigot-buyer-check",
+  "name": "spigot-buyer-list",
   "version": "1.0.0",
-  "description": "A NodeJS package that allows you to check the buyers list on Spigot for a premium plugin",
+  "description": "A NodeJS package that allows you to fetch the buyers list on Spigot for a premium plugin",
   "main": "src/index.js",
-  "repository": "git@github.com:diogotcorreia/spigot-buyer-check.git",
+  "repository": "git@github.com:diogotcorreia/spigot-buyer-list.git",
   "author": "Diogo Correia <me@diogotc.com>",
   "license": "MIT",
   "private": false,
