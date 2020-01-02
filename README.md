@@ -1,6 +1,25 @@
 # spigot-buyer-list
 
+![npm](https://img.shields.io/npm/v/spigot-buyer-list)
+![npm bundle size](https://img.shields.io/bundlephobia/min/spigot-buyer-list)
+![GitHub issues](https://img.shields.io/github/issues/diogotcorreia/spigot-buyer-list)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/diogotcorreia/spigot-buyer-list)
+![NPM](https://img.shields.io/npm/l/spigot-buyer-list)
+![GitHub last commit](https://img.shields.io/github/last-commit/diogotcorreia/spigot-buyer-list)
+
 A NodeJS package that allows you to fetch the buyers list on Spigot for a premium plugin
+
+## Installation
+
+This package can be installed from NPM using `npm` or `yarn`.
+
+```
+npm install spigot-buyer-list
+```
+
+```
+yarn add spigot-buyer-list
+```
 
 ## Code Examples
 
