@@ -4,7 +4,7 @@ import qs from 'qs';
 import { encodeCookies, getCookiesFromHeader } from './utils';
 
 const BUYER_REGEX = /<li class=".*memberListItem.*">[\s\S]+?<h3 class="username"><a.*href="members\/[\w\d]+\.(\d+)\/".*>([\w\d]+)<\/a><\/h3>[\s\S]+?<\/li>/g;
-const PAGINATION_REGEX = /<div class="PageNav".*>[\s\S]*<nav>(?:\n*<a.+>(\d+)<\/a>\n*)+\n*<a.+>Next.+<\/a>\n*<\/nav>/g;
+const PAGINATION_REGEX = /<div class="PageNav".*>[\s\S]*<nav>(?:\n*<a.+>(\d+)<\/a>\n*)+\n*<a.+>Next.+<\/a>\n*<\/nav>/;
 
 class SpigotSite {
   constructor(username, password, tfaSecret) {
@@ -88,7 +88,7 @@ class SpigotSite {
       })
     ).data;
     // See how many pages are there
-    const pageLimit = PAGINATION_REGEX.exec(buyersResponse)[1];
+    const pageLimit = (PAGINATION_REGEX.exec(buyersResponse) || [])[1];
     const parseResponse = (body) =>
       buyers.push(...[...body.matchAll(BUYER_REGEX)].map((v) => ({ id: v[1], username: v[2] })));
     parseResponse(buyersResponse);
