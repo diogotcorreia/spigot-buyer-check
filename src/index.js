@@ -3,7 +3,7 @@ import axios from 'axios';
 import qs from 'qs';
 import { encodeCookies, getCookiesFromHeader } from './utils';
 
-const BUYER_REGEX = /<li class=".*memberListItem.*">[\s\S]+?<h3 class="username"><a.*href="members\/[\w\d]+\.(\d+)\/".*>([\w\d]+)<\/a><\/h3>[\s\S]+?<\/li>/g;
+const BUYER_REGEX = /<li class=".*memberListItem.*">[\s\S]+?<h3 class="username"><a.*href="members\/[\w\d-]+\.(\d+)\/".*>([\w\d-]+)<\/a><\/h3>[\s\S]+?<\/li>/g;
 const PAGINATION_REGEX = /<div class="PageNav".*>[\s\S]*<nav>(?:\n*<a.+>(\d+)<\/a>\n*)+\n*<a.+>Next.+<\/a>\n*<\/nav>/;
 
 class SpigotSite {
