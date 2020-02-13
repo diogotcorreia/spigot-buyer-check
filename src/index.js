@@ -21,6 +21,10 @@ class SpigotSite {
     });
   }
 
+  clearCookies() {
+    this.cookies = {};
+  }
+
   async loginToSpigot() {
     // Gets session cookies from main page
     const cookieResponse = await axios.get('https://www.spigotmc.org');
