@@ -19,7 +19,10 @@ class SpigotSite {
   }
 
   async loginToSpigot() {
+    // Get session cookies from main page, otherwise we can't login
     await cloudscraper.get({ uri: 'https://www.spigotmc.org/' });
+
+    // Send a login request. Cookies are saved automatically.
     await cloudscraper.post({
       uri: 'https://www.spigotmc.org/login/login',
       formData: {
@@ -30,6 +33,8 @@ class SpigotSite {
         cookie_check: 1,
       },
     });
+
+    // Since we want to get the buyers for a premium plugin, the developer must have TFA enabled
     await cloudscraper.post({
       uri: 'https://www.spigotmc.org/login/two-step',
       formData: {
