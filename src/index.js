@@ -1,7 +1,5 @@
+import cloudscraper from 'cloudscraper';
 import speakeasy from 'speakeasy';
-import axios from 'axios';
-import qs from 'qs';
-import { encodeCookies, getCookiesFromHeader } from './utils';
 
 const BUYER_REGEX = /<li class=".*memberListItem.*">[\s\S]+?<h3 class="username"><a.*href="members\/[\w\d-]+\.(\d+)\/".*>([\w\d-]+)<\/a><\/h3>[\s\S]+?<\/li>/g;
 const PAGINATION_REGEX = /<div class="PageNav".*>[\s\S]*<nav>(?:\n*<a.+>(\d+)<\/a>\n*)+\n*<a.+>Next.+<\/a>\n*<\/nav>/;
@@ -11,7 +9,6 @@ class SpigotSite {
     this.username = username;
     this.password = password;
     this.tfaSecret = tfaSecret;
-    this.cookies = {};
   }
 
   getTfaCode() {
@@ -21,44 +18,21 @@ class SpigotSite {
     });
   }
 
-  clearCookies() {
-    this.cookies = {};
-  }
-
   async loginToSpigot() {
-    // Gets session cookies from main page
-    const cookieResponse = await axios.get('https://www.spigotmc.org');
-    this.cookies = {
-      ...this.cookies,
-      ...getCookiesFromHeader(cookieResponse.headers['set-cookie']),
-    };
-
-    // Logs in (validates token)
-    const loginResponse = await axios.post(
-      'https://www.spigotmc.org/login/login',
-      qs.stringify({
+    await cloudscraper.get({ uri: 'https://www.spigotmc.org/' });
+    await cloudscraper.post({
+      uri: 'https://www.spigotmc.org/login/login',
+      formData: {
         login: this.username,
         password: this.password,
         register: 0,
         remember: 1,
         cookie_check: 1,
-      }),
-      {
-        headers: {
-          Cookie: encodeCookies(this.cookies),
-        },
-      }
-    );
-    // This request probably doesn't return new cookies, but it's here just in case
-    this.cookies = {
-      ...this.cookies,
-      ...getCookiesFromHeader(loginResponse.headers['set-cookie']),
-    };
-
-    // Authenticate with TFA
-    const tfaResponse = await axios.post(
-      'https://www.spigotmc.org/login/two-step',
-      qs.stringify({
+      },
+    });
+    await cloudscraper.post({
+      uri: 'https://www.spigotmc.org/login/two-step',
+      formData: {
         code: this.getTfaCode(),
         trust: 1,
         provider: 'totp',
@@ -66,31 +40,16 @@ class SpigotSite {
         _xfToken: '',
         remember: 1,
         redirect: '/',
-      }),
-      {
-        headers: {
-          Cookie: encodeCookies(this.cookies),
-        },
-        maxRedirects: 0,
-        validateStatus: (status) => status === 303,
-      }
-    );
-    this.cookies = {
-      ...this.cookies,
-      ...getCookiesFromHeader(tfaResponse.headers['set-cookie']),
-    };
+      },
+    });
   }
 
   async getBuyersList(resource) {
     const buyers = [];
     // Get first page of buyers
-    const buyersResponse = (
-      await axios.get(`https://www.spigotmc.org/resources/${resource}/buyers`, {
-        headers: {
-          Cookie: encodeCookies(this.cookies),
-        },
-      })
-    ).data;
+    const buyersResponse = await cloudscraper.get({
+      uri: `https://www.spigotmc.org/resources/${resource}/buyers`,
+    });
     // See how many pages are there
     const pageLimit = (PAGINATION_REGEX.exec(buyersResponse) || [])[1];
     const parseResponse = (body) =>
@@ -99,13 +58,9 @@ class SpigotSite {
     // Request the buyers from the other pages
     if (pageLimit)
       for (let i = 2; i <= pageLimit; i++) {
-        const buyersResponsePage = (
-          await axios.get(`https://www.spigotmc.org/resources/${resource}/buyers?page=${i}`, {
-            headers: {
-              Cookie: encodeCookies(this.cookies),
-            },
-          })
-        ).data;
+        const buyersResponsePage = await cloudscraper.get({
+          uri: `https://www.spigotmc.org/resources/${resource}/buyers?page=${i}`,
+        });
         parseResponse(buyersResponsePage);
       }
     return buyers;

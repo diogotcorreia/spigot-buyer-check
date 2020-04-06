@@ -31,9 +31,9 @@ import SpigotSite from 'spigot-buyer-list';
 const getBuyers = async () => {
   try {
     const spigotSite = new SpigotSite('username', 'password', 'tfaSecret');
-    await loginToSpigot();
+    await spigotSite.loginToSpigot();
     // getBuyersList(resourceId)
-    const buyers = await getBuyersList(30331); // [{id: 123456, username: "user"}, ...]
+    const buyers = await spigotSite.getBuyersList(30331); // [{id: 123456, username: "user"}, ...]
   } catch (e) {
     console.error('Failed to fetch buyer list', e);
   }
