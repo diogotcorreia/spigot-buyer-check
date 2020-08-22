@@ -9,6 +9,10 @@
 
 A NodeJS package that allows you to fetch the buyers list on Spigot for a premium plugin
 
+# WARNING: DEPRECATED
+
+Since `cloudscraper` has been deprecated, this package no longer works correctly. Therefore, this project has been deprecated as well.
+
 ## Installation
 
 This package can be installed from NPM using `npm` or `yarn`.
